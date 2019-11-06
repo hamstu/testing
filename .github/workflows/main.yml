@@ -11,13 +11,6 @@ on:
 jobs:
   pr_comment:
     runs-on: ubuntu-latest
-    name: Comment on all PRs
+    name: Add a comment to new PRs
     steps:
-    - name: PR comment
-      id: hello
-      uses: hamstu/github-action-pr-comment@v1
-      with:
-        who-to-greet: 'Mona the Octocat'
-    # Use the output from the `hello` step
-    - name: Get the output time
-      run: echo "The time was ${{ steps.hello.outputs.time }}"
+      - uses: hamstu/github-action-pr-comment@v1
