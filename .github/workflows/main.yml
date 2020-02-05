@@ -8,9 +8,8 @@ on:
 jobs:
   pr_comment:
     runs-on: ubuntu-latest
-    name: Add a comment to new PRs
+    name: Add helpful comment to new PRs
     steps:
-      - uses: hamstu/github-action-pr-comment@v1
+      - uses: bufferapp/github-action-bufferbot-helper@v1
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          comment: "Hello from the testing repo!"
