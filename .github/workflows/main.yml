@@ -1,8 +1,5 @@
 name: Comment on PR
 
-env:
-  GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-
 on:
   pull_request:
     branches:
@@ -14,3 +11,6 @@ jobs:
     name: Add a comment to new PRs
     steps:
       - uses: hamstu/github-action-pr-comment@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          comment: "Hello from the testing repo!"
