@@ -1,4 +1,4 @@
-name: Comment on PR
+name: Bufferbot Helper
 
 on:
   pull_request:
