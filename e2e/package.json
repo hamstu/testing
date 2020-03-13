@@ -1,0 +1,12 @@
+{
+  "name": "e2e",
+  "version": "1.0.0",
+  "description": "End to end testing for buffer-publish with Cypress.io",
+  "main": "index.js",
+  "author": "Hamish Macpherson <hamsty@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "cypress": "^4.1.0"
+  }
+}

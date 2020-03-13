@@ -19,4 +19,51 @@ jobs:
       uses: actions/github-script@0.8.0
       with:
         script: |
-          console.log('${{ github.run_id }}');
+          const { client_payload: { sha }, repository: { statuses_url, html_url } } = context.payload;
+          const statusUrl = statuses_url.replace('{sha}', sha);
+          await github.request(`POST ${statusUrl}`, {
+            state: "pending",
+            description: "Running tests...",
+            context: "cypress-e2e",
+            target_url: `${html_url}/actions/runs/${{ github.run_id }}`
+          });
+
+    - name: Run Cypress
+      uses: cypress-io/github-action@v1
+      with:
+        working-directory: e2e
+        record: "true"
+      env:
+        CYPRESS_GITHUB_ACTIONS: "true"
+        CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+        CYPRESS_BASE_URL: ${{ github.event.client_payload.target_url }}
+        CYPRESS_PUBLISH_LOGIN_EMAIL: ${{ secrets.PUBLISH_LOGIN_EMAIL }}
+        CYPRESS_PUBLISH_LOGIN_PASSWORD: ${{ secrets.PUBLISH_LOGIN_PASSWORD }}
+    
+    - name: Set status to success
+      if: success()
+      uses: actions/github-script@0.8.0
+      with:
+        script: |
+          const { client_payload: { sha }, repository: { statuses_url, html_url } } = context.payload;
+          const statusUrl = statuses_url.replace('{sha}', sha);
+          await github.request(`POST ${statusUrl}`, {
+            state: "success",
+            description: "Tests completed",
+            context: "cypress-e2e",
+            target_url: `${html_url}/actions/runs/${{ github.run_id }}`
+          });
+
+    - name: Set status to error
+      if: failure()
+      uses: actions/github-script@0.8.0
+      with:
+        script: |
+          const { client_payload: { sha }, repository: { statuses_url, html_url } } = context.payload;
+          const statusUrl = statuses_url.replace('{sha}', sha);
+          await github.request(`POST ${statusUrl}`, {
+            state: "error",
+            description: "Tests failed",
+            context: "cypress-e2e",
+            target_url: `${html_url}/actions/runs/${{ github.run_id }}`
+          });
