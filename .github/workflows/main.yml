@@ -4,93 +4,19 @@ on: [repository_dispatch]
 
 jobs:
   cypress:
-    name: "Cypress"
+    name: Cypress
     runs-on: ubuntu-latest
     steps:             
     - name: Bail out if unexpected action
       if: github.event.action != 'bufferbotbrains'
       run: exit 1
-
-#     - name: Log Payload
-#       run: echo "${{ toJson(github.event.client_payload) }}"
     
     - uses: actions/checkout@v2
       with:
         ref: ${{ github.event.client_payload.sha }}
 
-    - name: "Set status to pending"
+    - name: Set status to pending
       uses: actions/github-script@0.8.0
       with:
         script: |
-          const { client_payload: { sha }, repository: { statuses_url } } = context.payload;
-          const statusUrl = statuses_url.replace('{sha}', sha);
-          console.log({ sha, statuses_url, statusUrl });
-          await github.request(`POST ${statusUrl}`, {
-            state: "pending",
-            description: "Pretending to run Cypress...",
-            context: "Cypress"
-          });
-
-    # - name: Run Cypress
-    #   uses: cypress-io/github-action@v1
-    #   with:
-    #     working-directory: e2e
-    #     record: "true"
-    #   env:
-    #     CYPRESS_GITHUB_ACTIONS: "true"
-    #     CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-    #     CYPRESS_BASE_URL: ${{ steps.data.outputs.result.stagingUrl }}
-    #     CYPRESS_PUBLISH_LOGIN_EMAIL: ${{ secrets.PUBLISH_LOGIN_EMAIL }}
-    #     CYPRESS_PUBLISH_LOGIN_PASSWORD: ${{ secrets.PUBLISH_LOGIN_PASSWORD }}
-
-        
-
-
-# name: Cypress
-
-# on: [status]
-
-# jobs:
-#   cypress:
-#     name: "Cypress"
-#     runs-on: ubuntu-latest
-#     steps:    
-#     - name: Get Data
-#       uses: actions/github-script@0.8.0
-#       id: data
-#       with:
-#         script: |
-#           const { branches, context: statusContext, description, state, target_url } = context.payload;
-#           if (
-#             statusContext.startsWith("bufferbotbrains/cicd") &&
-#             state === "success" &&
-#             description.match(/Build successfully deployed/)
-#           ) {
-#             return { stagingUrl: target_url, branch: branches[0].name };
-#           }
-#           return false;
-    
-#     - name: Log Results
-#       run: echo ${{ toJson(steps.data.outputs.result) }}
-      
-#     - name: Bail out if not deployed status
-#       if: steps.data.outputs.result == 'false'
-#       run: exit 1
-    
-#     - uses: actions/checkout@v2
-#       with:
-#         ref: ${{ steps.data.outputs.result.branch }}
-
-#     - name: Run Cypress
-#       uses: cypress-io/github-action@v1
-#       with:
-#         working-directory: e2e
-#         record: "true"
-#       env:
-#         CYPRESS_GITHUB_ACTIONS: "true"
-#         CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-#         CYPRESS_BASE_URL: ${{ steps.data.outputs.result.stagingUrl }}
-#         CYPRESS_PUBLISH_LOGIN_EMAIL: ${{ secrets.PUBLISH_LOGIN_EMAIL }}
-#         CYPRESS_PUBLISH_LOGIN_PASSWORD: ${{ secrets.PUBLISH_LOGIN_PASSWORD }}
-
-        
+          console.log(context);
