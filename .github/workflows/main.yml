@@ -24,6 +24,7 @@ jobs:
         script: |
           const { client_payload: { sha }, repository: { statuses_url } } = context.payload;
           const statusUrl = statuses_url.replace('{sha}', sha);
+          console.log({ sha, statuses_url, statusUrl });
           await github.request(`POST ${statusUrl}`, {
             state: "pending",
             description: "Pretending to run Cypress...",
