@@ -12,4 +12,4 @@ jobs:
       run: exit 1
 
     - name: Log Payload
-      run: echo ${{ toJson(github.event) }}
+      run: echo "${{ toJson(github.event) }}"
