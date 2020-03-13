@@ -11,8 +11,8 @@ jobs:
       if: github.event.action != 'bufferbotbrains'
       run: exit 1
 
-    - name: Log Payload
-      run: echo ${{ toJson(github.event.client_payload) }}
+#     - name: Log Payload
+#       run: echo "${{ toJson(github.event.client_payload) }}"
     
     - uses: actions/checkout@v2
       with:
